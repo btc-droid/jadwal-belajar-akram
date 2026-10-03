@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jadwal Belajar Akram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3faf8; --card:#ffffff; --ink:#14332f; --muted:#4d6b66; --line:#d3e8e2;
+  --teal:#0f6b5f; --sun:#ffc83d; --sunInk:#5a4200; --star-off:#cfe2dd;
+  --k-tahsin:#0f6b5f; --k-tahfidz:#3b6fd4; --k-sekolah:#d98a1f; --k-main:#7a9a2e; --k-rest:#8a9a97; --k-ibadah:#6b4fb3;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1f1c; --card:#16302b; --ink:#e6f4f0; --muted:#9bbab3; --line:#264a43;
+    --teal:#4fc8b5; --sunInk:#ffe08a; --star-off:#2f524b;
+    --k-tahsin:#4fc8b5; --k-tahfidz:#7fa6ff; --k-sekolah:#f2b04d; --k-main:#a9cc58; --k-rest:#8fa39f; --k-ibadah:#a994e6;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1f1c; --card:#16302b; --ink:#e6f4f0; --muted:#9bbab3; --line:#264a43;
+  --teal:#4fc8b5; --sunInk:#ffe08a; --star-off:#2f524b;
+  --k-tahsin:#4fc8b5; --k-tahfidz:#7fa6ff; --k-sekolah:#f2b04d; --k-main:#a9cc58; --k-rest:#8fa39f; --k-ibadah:#a994e6;
+}
+html{height:100%; scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif; font-size:17px; line-height:1.5}
+main{max-width:640px; margin:0 auto; padding:20px 16px 48px}
+h1{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif; font-weight:800; font-size:clamp(2rem,8vw,2.8rem); line-height:1.05; margin:8px 0 4px; color:var(--teal)}
+.sub{margin:0 0 18px; color:var(--muted)}
+.days{display:flex; gap:8px; overflow-x:auto; padding:2px 0 10px; margin:0 -16px; padding-left:16px; padding-right:16px; scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.day{flex:0 0 auto; border:2px solid var(--line); background:var(--card); color:var(--ink); font:inherit; font-weight:700; padding:8px 16px; border-radius:999px; cursor:pointer}
+.day[aria-pressed="true"]{background:var(--teal); border-color:var(--teal); color:#fff}
+.dark-on .day[aria-pressed="true"]{color:#0e1f1c}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .day[aria-pressed="true"]{color:#0e1f1c}}
+:root[data-theme="dark"] .day[aria-pressed="true"]{color:#0e1f1c}
+.day:focus-visible,.item:focus-within,.reset:focus-visible{outline:3px solid var(--sun); outline-offset:2px}
+.stars{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:8px 0 6px}
+.stars svg{width:34px; height:34px; fill:var(--star-off); transition:fill .25s, transform .25s}
+.stars svg.on{fill:var(--sun); transform:scale(1.12)}
+.praise{min-height:1.6em; margin:0 0 14px; font-weight:700; color:var(--sunInk)}
+.theme-title{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif; font-weight:600; font-size:1.3rem; margin:6px 0 10px}
+ul{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+.item{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; background:var(--card); border:1px solid var(--line); border-left:7px solid var(--c); border-radius:16px; padding:12px 14px; cursor:pointer}
+.item input{width:26px; height:26px; margin:2px 0 0; accent-color:var(--teal); cursor:pointer}
+.item .t{display:block; font-weight:700; color:var(--c); font-size:.95rem}
+.item .n{display:block; font-weight:700; font-size:1.05rem}
+.item .d{display:block; color:var(--muted); font-size:.95rem}
+.item.done .n{text-decoration:line-through; text-decoration-thickness:2px; opacity:.6}
+.tips{margin-top:28px; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:6px 16px}
+.tips summary{font-weight:700; cursor:pointer; padding:10px 0}
+.tips ol{margin:0 0 12px; padding-left:20px; color:var(--muted)}
+.tips li{margin:4px 0}
+.reset{margin-top:20px; font:inherit; font-weight:700; border:2px solid var(--line); background:transparent; color:var(--ink); padding:10px 18px; border-radius:12px; cursor:pointer}
+@media (prefers-reduced-motion: reduce){.stars svg{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Jadwal Belajar Akram</h1>
+  <p class="sub">Kelas 1 · belajar di rumah. Centang kegiatan yang sudah selesai untuk mengumpulkan bintang.</p>
+  <div class="days" id="days" role="group" aria-label="Pilih hari"></div>
+  <div class="stars" id="stars" aria-hidden="true"></div>
+  <p class="praise" id="praise" aria-live="polite"></p>
+  <h2 class="theme-title" id="theme"></h2>
+  <ul id="list"></ul>
+  <details class="tips">
+    <summary>Tips untuk orang tua dan kakak</summary>
+    <ol>
+      <li>Mulai dari hafalan yang sudah dikuasai, lalu lanjut ke yang masih sulit.</li>
+      <li>Baca per ayat, ulangi 3–5 kali bersama, lalu Akram mencoba sendiri.</li>
+      <li>Beri pujian yang spesifik, misalnya "Tajwidnya sudah rapi!".</li>
+      <li>Kurangi HP/TV pada jam belajar, dan akhiri sesi dengan hal yang menyenangkan.</li>
+    </ol>
+  </details>
+  <button class="reset" id="reset" type="button">Mulai minggu baru</button>
+</main>
+<script>
+var KIND={tahsin:'--k-tahsin',tahfidz:'--k-tahfidz',sekolah:'--k-sekolah',main:'--k-main',rest:'--k-rest',ibadah:'--k-ibadah'};
+var base=function(sub,det){return [
+ ['Pulang sekolah','Makan siang dan istirahat','Makan, lalu tidur siang atau istirahat 1–1,5 jam','rest'],
+ ['15.30','Tahsin','Ulang Nuraniyyah Dars 1 dan QS. Al-Fatihah (15 menit)','tahsin'],
+ ['16.00','Bermain dan mandi sore','Bermain bebas, sekitar 1 jam','main'],
+ ['17.00','Tahfidz: murajaah','Ulang hafalan QS. An-Nas sampai Al-Kafirun (20 menit)','tahfidz'],
+ ['Setelah Maghrib','Mengaji bersama keluarga','Sesuai kebiasaan keluarga','ibadah'],
+ ['19.30',sub,det+' (20–30 menit)','sekolah'],
+ ['20.00','Cerita ringan dan tidur','Dengarkan cerita, lalu siap-siap tidur','rest']];};
+var DAYS=[
+ {n:'Senin',th:'Hari membaca',it:base('Belajar membaca','Suku kata dan kalimat pendek')},
+ {n:'Selasa',th:'Hari menulis',it:base('Belajar menulis','Menebalkan huruf dan menyalin kata')},
+ {n:'Rabu',th:'Hari berhitung',it:base('Belajar berhitung','Tambah dan kurang sederhana, pakai benda nyata')},
+ {n:'Kamis',th:'Hari PR dan mengulang',it:base('PR dan mengulang pelajaran','Kerjakan PR, ulang pelajaran hari ini')},
+ {n:'Jumat',th:'Hari ujian praktik',it:[
+  ['Pagi','Murajaah cepat','Al-Fatihah dan surah tahfidz sebelum berangkat (10 menit)','tahfidz'],
+  ['Pulang sekolah','Istirahat','Tidak ada belajar berat hari ini','rest'],
+  ['Setelah Maghrib','Mengaji bersama keluarga','Sesuai kebiasaan keluarga','ibadah'],
+  ['19.30','Ulang yang masih kurang','Bagian Tahsin atau Tahfidz yang belum lancar (15 menit)','tahsin'],
+  ['20.00','Cerita ringan dan tidur','Dengarkan cerita, lalu siap-siap tidur','rest']]},
+ {n:'Sabtu',th:'Hari hafalan dan berkreasi',it:[
+  ['Pagi','Murajaah Tahfidz','QS. An-Nas sampai Al-Kafirun, dibaca berurutan (25 menit)','tahfidz'],
+  ['Siang','Bermain bebas','Bermain di luar atau bersama teman','main'],
+  ['15.00','Kegiatan kreatif','Mewarnai huruf hijaiyah atau main kartu huruf','sekolah'],
+  ['Setelah Maghrib','Mengaji bersama keluarga','Sesuai kebiasaan keluarga','ibadah'],
+  ['20.00','Cerita ringan dan tidur','Dengarkan cerita, lalu siap-siap tidur','rest']]},
+ {n:'Minggu',th:'Hari santai',it:[
+  ['Pagi','Baca cerita bersama','Pilih buku cerita favorit Akram','sekolah'],
+  ['Sore','Murajaah santai','Ulang hafalan favorit, tanpa target (10 menit)','tahfidz'],
+  ['20.00','Cerita ringan dan tidur','Siap-siap untuk hari Senin','rest']]}
+];
+var KEY='akram-jadwal-v1', state={};
+function load(){try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+var sel=(new Date().getDay()+6)%7;
+var STAR='<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.2 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg>';
+function render(){
+  var d=DAYS[sel], got=state[sel]||[];
+  var dEl=document.getElementById('days'); dEl.innerHTML='';
+  DAYS.forEach(function(x,i){var b=document.createElement('button');b.type='button';b.className='day';b.textContent=x.n;b.setAttribute('aria-pressed',i===sel);b.onclick=function(){sel=i;render()};dEl.appendChild(b)});
+  document.getElementById('theme').textContent=d.n+': '+d.th;
+  var n=0, sEl=document.getElementById('stars'); sEl.innerHTML='';
+  d.it.forEach(function(_,i){var s=document.createElement('span');s.innerHTML=STAR;var svg=s.firstChild;if(got.indexOf(i)>-1){svg.setAttribute('class','on');n++}sEl.appendChild(svg)});
+  document.getElementById('praise').textContent=n===d.it.length?'Hebat, Akram! Semua kegiatan hari ini selesai.':(n>0?n+' dari '+d.it.length+' bintang. Terus semangat!':'');
+  var ul=document.getElementById('list'); ul.innerHTML='';
+  d.it.forEach(function(a,i){
+    var li=document.createElement('li'), lb=document.createElement('label'), on=got.indexOf(i)>-1;
+    lb.className='item'+(on?' done':''); lb.style.setProperty('--c','var('+KIND[a[3]]+')');
+    lb.innerHTML='<input type="checkbox"'+(on?' checked':'')+'><span><span class="t">'+a[0]+'</span><span class="n">'+a[1]+'</span><span class="d">'+a[2]+'</span></span>';
+    lb.querySelector('input').onchange=function(e){
+      var g=(state[sel]||[]).filter(function(k){return k!==i}); if(e.target.checked)g.push(i); state[sel]=g; save(); render();
+    };
+    li.appendChild(lb); ul.appendChild(li);
+  });
+}
+document.getElementById('reset').onclick=function(){state={};save();render()};
+load(); render();
+</script>
+</body>
+</html>
